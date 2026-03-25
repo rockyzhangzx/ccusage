@@ -57,6 +57,7 @@ export const weeklyCommand = define({
 						cacheReadTokens: 0,
 						totalTokens: 0,
 						totalCost: 0,
+						requestCount: 0,
 					},
 				};
 				log(JSON.stringify(emptyOutput, null, 2));
@@ -86,6 +87,7 @@ export const weeklyCommand = define({
 					cacheReadTokens: data.cacheReadTokens,
 					totalTokens: getTotalTokens(data),
 					totalCost: data.totalCost,
+					requestCount: data.requestCount,
 					modelsUsed: data.modelsUsed,
 					modelBreakdowns: data.modelBreakdowns,
 				})),
@@ -125,6 +127,7 @@ export const weeklyCommand = define({
 					cacheCreationTokens: data.cacheCreationTokens,
 					cacheReadTokens: data.cacheReadTokens,
 					totalCost: data.totalCost,
+					requestCount: data.requestCount,
 					modelsUsed: data.modelsUsed,
 				});
 				table.push(row);
@@ -136,7 +139,7 @@ export const weeklyCommand = define({
 			}
 
 			// Add empty row for visual separation before totals
-			addEmptySeparatorRow(table, 8);
+			addEmptySeparatorRow(table, 9);
 
 			// Add totals
 			const totalsRow = formatTotalsRow({
@@ -145,6 +148,7 @@ export const weeklyCommand = define({
 				cacheCreationTokens: totals.cacheCreationTokens,
 				cacheReadTokens: totals.cacheReadTokens,
 				totalCost: totals.totalCost,
+				requestCount: totals.requestCount,
 			});
 			table.push(totalsRow);
 

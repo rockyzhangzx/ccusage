@@ -452,7 +452,7 @@ export function pushBreakdownRows(
 		cacheReadTokens: number;
 		cost: number;
 	}>,
-	extraColumns = 1,
+	extraColumns = 2,
 	trailingColumns = 0,
 ): void {
 	for (const breakdown of breakdowns) {
@@ -511,6 +511,7 @@ export type UsageData = {
 	cacheCreationTokens: number;
 	cacheReadTokens: number;
 	totalCost: number;
+	requestCount?: number;
 	modelsUsed?: string[];
 };
 
@@ -523,6 +524,7 @@ export function createUsageReportTable(config: UsageReportConfig): ResponsiveTab
 	const baseHeaders = [
 		config.firstColumnName,
 		'Models',
+		'Requests',
 		'Input',
 		'Output',
 		'Cache Create',
@@ -540,11 +542,19 @@ export function createUsageReportTable(config: UsageReportConfig): ResponsiveTab
 		'right',
 		'right',
 		'right',
+		'right',
 	];
 
-	const compactHeaders = [config.firstColumnName, 'Models', 'Input', 'Output', 'Cost (USD)'];
+	const compactHeaders = [
+		config.firstColumnName,
+		'Models',
+		'Requests',
+		'Input',
+		'Output',
+		'Cost (USD)',
+	];
 
-	const compactAligns: TableCellAlign[] = ['left', 'left', 'right', 'right', 'right'];
+	const compactAligns: TableCellAlign[] = ['left', 'left', 'right', 'right', 'right', 'right'];
 
 	// Add Last Activity column for session reports
 	if (config.includeLastActivity ?? false) {
@@ -584,6 +594,7 @@ export function formatUsageDataRow(
 	const row: (string | number)[] = [
 		firstColumnValue,
 		data.modelsUsed != null ? formatModelsDisplayMultiline(data.modelsUsed) : '',
+		data.requestCount != null ? formatNumber(data.requestCount) : '',
 		formatNumber(data.inputTokens),
 		formatNumber(data.outputTokens),
 		formatNumber(data.cacheCreationTokens),
@@ -615,6 +626,7 @@ export function formatTotalsRow(
 	const row: (string | number)[] = [
 		pc.yellow('Total'),
 		'', // Empty for Models column in totals
+		totals.requestCount != null ? pc.yellow(formatNumber(totals.requestCount)) : '',
 		pc.yellow(formatNumber(totals.inputTokens)),
 		pc.yellow(formatNumber(totals.outputTokens)),
 		pc.yellow(formatNumber(totals.cacheCreationTokens)),

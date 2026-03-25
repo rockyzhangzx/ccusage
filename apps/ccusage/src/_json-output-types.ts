@@ -23,6 +23,7 @@ export type DailyProjectOutput = {
 	cacheReadTokens: number;
 	totalTokens: number;
 	totalCost: number;
+	requestCount: number;
 	modelsUsed: ModelName[];
 	modelBreakdowns: ModelBreakdown[];
 };

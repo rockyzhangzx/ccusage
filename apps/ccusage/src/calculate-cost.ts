@@ -31,6 +31,7 @@ type TokenData = AggregatedTokenCounts;
  */
 type TokenTotals = TokenData & {
 	totalCost: number;
+	requestCount: number;
 };
 
 /**
@@ -55,6 +56,7 @@ export function calculateTotals(
 			cacheCreationTokens: acc.cacheCreationTokens + item.cacheCreationTokens,
 			cacheReadTokens: acc.cacheReadTokens + item.cacheReadTokens,
 			totalCost: acc.totalCost + item.totalCost,
+			requestCount: acc.requestCount + item.requestCount,
 		}),
 		{
 			inputTokens: 0,
@@ -62,6 +64,7 @@ export function calculateTotals(
 			cacheCreationTokens: 0,
 			cacheReadTokens: 0,
 			totalCost: 0,
+			requestCount: 0,
 		},
 	);
 }
@@ -92,6 +95,7 @@ if (import.meta.vitest != null) {
 					cacheCreationTokens: 25,
 					cacheReadTokens: 10,
 					totalCost: 0.01,
+					requestCount: 5,
 					modelsUsed: [createModelName('claude-sonnet-4-20250514')],
 					modelBreakdowns: [],
 				},
@@ -102,6 +106,7 @@ if (import.meta.vitest != null) {
 					cacheCreationTokens: 50,
 					cacheReadTokens: 20,
 					totalCost: 0.02,
+					requestCount: 10,
 					modelsUsed: [createModelName('claude-opus-4-20250514')],
 					modelBreakdowns: [],
 				},
@@ -113,6 +118,7 @@ if (import.meta.vitest != null) {
 			expect(totals.cacheCreationTokens).toBe(75);
 			expect(totals.cacheReadTokens).toBe(30);
 			expect(totals.totalCost).toBeCloseTo(0.03);
+			expect(totals.requestCount).toBe(15);
 		});
 
 		it('calculateTotals should aggregate session usage data', () => {
@@ -125,6 +131,7 @@ if (import.meta.vitest != null) {
 					cacheCreationTokens: 25,
 					cacheReadTokens: 10,
 					totalCost: 0.01,
+					requestCount: 3,
 					lastActivity: createActivityDate('2024-01-01'),
 					versions: [createVersion('1.0.3')],
 					modelsUsed: [createModelName('claude-sonnet-4-20250514')],
@@ -138,6 +145,7 @@ if (import.meta.vitest != null) {
 					cacheCreationTokens: 50,
 					cacheReadTokens: 20,
 					totalCost: 0.02,
+					requestCount: 7,
 					lastActivity: createActivityDate('2024-01-02'),
 					versions: [createVersion('1.0.3'), createVersion('1.0.4')],
 					modelsUsed: [createModelName('claude-opus-4-20250514')],
@@ -151,6 +159,7 @@ if (import.meta.vitest != null) {
 			expect(totals.cacheCreationTokens).toBe(75);
 			expect(totals.cacheReadTokens).toBe(30);
 			expect(totals.totalCost).toBeCloseTo(0.03);
+			expect(totals.requestCount).toBe(10);
 		});
 
 		it('getTotalTokens should sum all token types', () => {
@@ -184,6 +193,7 @@ if (import.meta.vitest != null) {
 				cacheCreationTokens: 25,
 				cacheReadTokens: 10,
 				totalCost: 0.01,
+				requestCount: 5,
 			};
 
 			const totalsObject = createTotalsObject(totals);
@@ -194,6 +204,7 @@ if (import.meta.vitest != null) {
 				cacheReadTokens: 10,
 				totalTokens: 185,
 				totalCost: 0.01,
+				requestCount: 5,
 			});
 		});
 
@@ -205,6 +216,7 @@ if (import.meta.vitest != null) {
 				cacheCreationTokens: 0,
 				cacheReadTokens: 0,
 				totalCost: 0,
+				requestCount: 0,
 			});
 		});
 	});

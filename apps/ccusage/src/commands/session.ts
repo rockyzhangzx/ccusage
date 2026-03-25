@@ -103,6 +103,7 @@ export const sessionCommand = define({
 					cacheReadTokens: data.cacheReadTokens,
 					totalTokens: getTotalTokens(data),
 					totalCost: data.totalCost,
+					requestCount: data.requestCount,
 					lastActivity: data.lastActivity,
 					modelsUsed: data.modelsUsed,
 					modelBreakdowns: data.modelBreakdowns,
@@ -152,6 +153,7 @@ export const sessionCommand = define({
 						cacheCreationTokens: data.cacheCreationTokens,
 						cacheReadTokens: data.cacheReadTokens,
 						totalCost: data.totalCost,
+						requestCount: data.requestCount,
 						modelsUsed: data.modelsUsed,
 					},
 					data.lastActivity,
@@ -160,13 +162,13 @@ export const sessionCommand = define({
 
 				// Add model breakdown rows if flag is set
 				if (ctx.values.breakdown) {
-					// Session has 1 extra column before data and 1 trailing column
-					pushBreakdownRows(table, data.modelBreakdowns, 1, 1);
+					// Session has 2 extra columns before data (Models + Requests) and 1 trailing column
+					pushBreakdownRows(table, data.modelBreakdowns, 2, 1);
 				}
 			}
 
 			// Add empty row for visual separation before totals
-			addEmptySeparatorRow(table, 9);
+			addEmptySeparatorRow(table, 10);
 
 			// Add totals
 			const totalsRow = formatTotalsRow(
@@ -176,6 +178,7 @@ export const sessionCommand = define({
 					cacheCreationTokens: totals.cacheCreationTokens,
 					cacheReadTokens: totals.cacheReadTokens,
 					totalCost: totals.totalCost,
+					requestCount: totals.requestCount,
 				},
 				true,
 			); // Include Last Activity column

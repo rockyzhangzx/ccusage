@@ -246,6 +246,7 @@ export const dailyUsageSchema = v.object({
 	cacheCreationTokens: v.number(),
 	cacheReadTokens: v.number(),
 	totalCost: v.number(),
+	requestCount: v.number(), // Number of API requests
 	modelsUsed: v.array(modelNameSchema),
 	modelBreakdowns: v.array(modelBreakdownSchema),
 	project: v.optional(v.string()), // Project name when groupByProject is enabled
@@ -267,6 +268,7 @@ export const sessionUsageSchema = v.object({
 	cacheCreationTokens: v.number(),
 	cacheReadTokens: v.number(),
 	totalCost: v.number(),
+	requestCount: v.number(), // Number of API requests
 	lastActivity: activityDateSchema,
 	versions: v.array(versionSchema), // List of unique versions used in this session
 	modelsUsed: v.array(modelNameSchema),
@@ -288,6 +290,7 @@ export const monthlyUsageSchema = v.object({
 	cacheCreationTokens: v.number(),
 	cacheReadTokens: v.number(),
 	totalCost: v.number(),
+	requestCount: v.number(), // Number of API requests
 	modelsUsed: v.array(modelNameSchema),
 	modelBreakdowns: v.array(modelBreakdownSchema),
 	project: v.optional(v.string()), // Project name when groupByProject is enabled
@@ -308,6 +311,7 @@ export const weeklyUsageSchema = v.object({
 	cacheCreationTokens: v.number(),
 	cacheReadTokens: v.number(),
 	totalCost: v.number(),
+	requestCount: v.number(), // Number of API requests
 	modelsUsed: v.array(modelNameSchema),
 	modelBreakdowns: v.array(modelBreakdownSchema),
 	project: v.optional(v.string()), // Project name when groupByProject is enabled
@@ -328,6 +332,7 @@ export const bucketUsageSchema = v.object({
 	cacheCreationTokens: v.number(),
 	cacheReadTokens: v.number(),
 	totalCost: v.number(),
+	requestCount: v.number(), // Number of API requests
 	modelsUsed: v.array(modelNameSchema),
 	modelBreakdowns: v.array(modelBreakdownSchema),
 	project: v.optional(v.string()), // Project name when groupByProject is enabled
@@ -878,6 +883,7 @@ export async function loadDailyUsageData(options?: LoadOptions): Promise<DailyUs
 			return {
 				date: createDailyDate(date),
 				...totals,
+				requestCount: entries.length,
 				modelsUsed: modelsUsed as ModelName[],
 				modelBreakdowns,
 				...(project != null && { project }),
@@ -1052,6 +1058,7 @@ export async function loadSessionData(options?: LoadOptions): Promise<SessionUsa
 				sessionId: createSessionId(latestEntry.sessionId),
 				projectPath: createProjectPath(latestEntry.projectPath),
 				...totals,
+				requestCount: entries.length,
 				// Always use DEFAULT_LOCALE for date storage to ensure YYYY-MM-DD format
 				lastActivity: formatDate(
 					latestEntry.timestamp,
@@ -1229,6 +1236,7 @@ export async function loadBucketUsageData(
 		let totalCacheCreationTokens = 0;
 		let totalCacheReadTokens = 0;
 		let totalCost = 0;
+		let totalRequestCount = 0;
 
 		for (const daily of dailyEntries) {
 			totalInputTokens += daily.inputTokens;
@@ -1236,6 +1244,7 @@ export async function loadBucketUsageData(
 			totalCacheCreationTokens += daily.cacheCreationTokens;
 			totalCacheReadTokens += daily.cacheReadTokens;
 			totalCost += daily.totalCost;
+			totalRequestCount += daily.requestCount;
 		}
 		const bucketUsage: BucketUsage = {
 			bucket,
@@ -1244,6 +1253,7 @@ export async function loadBucketUsageData(
 			cacheCreationTokens: totalCacheCreationTokens,
 			cacheReadTokens: totalCacheReadTokens,
 			totalCost,
+			requestCount: totalRequestCount,
 			modelsUsed: uniq(models) as ModelName[],
 			modelBreakdowns,
 			...(project != null && { project }),
@@ -2029,6 +2039,7 @@ invalid json line
 				cacheCreationTokens: 0,
 				cacheReadTokens: 0,
 				totalCost: 0.015,
+				requestCount: 1,
 				modelsUsed: [],
 				modelBreakdowns: [
 					{
@@ -2048,6 +2059,7 @@ invalid json line
 				cacheCreationTokens: 0,
 				cacheReadTokens: 0,
 				totalCost: 0.03,
+				requestCount: 2,
 				modelsUsed: [],
 				modelBreakdowns: [
 					{
@@ -2105,6 +2117,7 @@ invalid json line
 				cacheCreationTokens: 0,
 				cacheReadTokens: 0,
 				totalCost: 0.03,
+				requestCount: 2,
 				modelsUsed: [],
 				modelBreakdowns: [
 					{
@@ -2381,6 +2394,7 @@ invalid json line
 				cacheCreationTokens: 0,
 				cacheReadTokens: 0,
 				totalCost: 0.015,
+				requestCount: 1,
 				modelsUsed: [],
 				modelBreakdowns: [
 					{
@@ -2400,6 +2414,7 @@ invalid json line
 				cacheCreationTokens: 0,
 				cacheReadTokens: 0,
 				totalCost: 0.03,
+				requestCount: 2,
 				modelsUsed: [],
 				modelBreakdowns: [
 					{
@@ -2457,6 +2472,7 @@ invalid json line
 				cacheCreationTokens: 0,
 				cacheReadTokens: 0,
 				totalCost: 0.03,
+				requestCount: 2,
 				modelsUsed: [],
 				modelBreakdowns: [
 					{

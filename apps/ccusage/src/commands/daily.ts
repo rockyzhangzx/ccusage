@@ -115,6 +115,7 @@ export const dailyCommand = define({
 								cacheReadTokens: data.cacheReadTokens,
 								totalTokens: getTotalTokens(data),
 								totalCost: data.totalCost,
+								requestCount: data.requestCount,
 								modelsUsed: data.modelsUsed,
 								modelBreakdowns: data.modelBreakdowns,
 								...(data.project != null && { project: data.project }),
@@ -156,12 +157,13 @@ export const dailyCommand = define({
 					// Add project section header
 					if (!isFirstProject) {
 						// Add empty row for visual separation between projects
-						table.push(['', '', '', '', '', '', '', '']);
+						table.push(['', '', '', '', '', '', '', '', '']);
 					}
 
 					// Add project header row
 					table.push([
 						pc.cyan(`Project: ${formatProjectName(projectName, projectAliases)}`),
+						'',
 						'',
 						'',
 						'',
@@ -179,6 +181,7 @@ export const dailyCommand = define({
 							cacheCreationTokens: data.cacheCreationTokens,
 							cacheReadTokens: data.cacheReadTokens,
 							totalCost: data.totalCost,
+							requestCount: data.requestCount,
 							modelsUsed: data.modelsUsed,
 						});
 						table.push(row);
@@ -201,6 +204,7 @@ export const dailyCommand = define({
 						cacheCreationTokens: data.cacheCreationTokens,
 						cacheReadTokens: data.cacheReadTokens,
 						totalCost: data.totalCost,
+						requestCount: data.requestCount,
 						modelsUsed: data.modelsUsed,
 					});
 					table.push(row);
@@ -213,7 +217,7 @@ export const dailyCommand = define({
 			}
 
 			// Add empty row for visual separation before totals
-			addEmptySeparatorRow(table, 8);
+			addEmptySeparatorRow(table, 9);
 
 			// Add totals
 			const totalsRow = formatTotalsRow({
@@ -222,6 +226,7 @@ export const dailyCommand = define({
 				cacheCreationTokens: totals.cacheCreationTokens,
 				cacheReadTokens: totals.cacheReadTokens,
 				totalCost: totals.totalCost,
+				requestCount: totals.requestCount,
 			});
 			table.push(totalsRow);
 
