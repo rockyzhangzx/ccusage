@@ -1,7 +1,7 @@
 {
-	"name": "ccusage",
+	"name": "@rockyzhangzx/ccusage",
 	"type": "module",
-	"version": "18.0.10",
+	"version": "18.0.12",
 	"description": "Usage analysis tool for Claude Code",
 	"author": "ryoppippi",
 	"license": "MIT",
@@ -27,7 +27,7 @@
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"bin": {
-		"ccusage": "./src/index.ts"
+		"ccusage": "./dist/index.js"
 	},
 	"files": [
 		"config-schema.json",
@@ -54,7 +54,7 @@
 		"format": "pnpm run lint --fix",
 		"generate:schema": "bun scripts/generate-json-schema.ts",
 		"lint": "eslint --cache .",
-		"prepack": "pnpm run build && clean-pkg-json",
+		"prepack": "pnpm run build",
 		"prepare": "pnpm run generate:schema || true",
 		"prerelease": "pnpm run lint && pnpm run typecheck && pnpm run build",
 		"start": "bun ./src/index.ts",
